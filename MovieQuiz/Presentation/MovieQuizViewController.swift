@@ -29,43 +29,43 @@ final class MovieQuizViewController: UIViewController {
     private var currentQuestionIndex = 0
     private var correctAnswers = 0
     private let questions: [QuizQuestion] = [
-        QuizQuestion(
+        .init(
             image: "The Godfather",
             text: "Рейтинг этого фильма больше чем 6?",
             correctAnswer: true),
-        QuizQuestion(
+        .init(
             image: "The Dark Knight",
             text: "Рейтинг этого фильма больше чем 6?",
             correctAnswer: true),
-        QuizQuestion(
+        .init(
             image: "Kill Bill",
             text: "Рейтинг этого фильма больше чем 6?",
             correctAnswer: true),
-        QuizQuestion(
+        .init(
             image: "The Avengers",
             text: "Рейтинг этого фильма больше чем 6?",
             correctAnswer: true),
-        QuizQuestion(
+        .init(
             image: "Deadpool",
             text: "Рейтинг этого фильма больше чем 6?",
             correctAnswer: true),
-        QuizQuestion(
+        .init(
             image: "The Green Knight",
             text: "Рейтинг этого фильма больше чем 6?",
             correctAnswer: true),
-        QuizQuestion(
+        .init(
             image: "Old",
             text: "Рейтинг этого фильма больше чем 6?",
             correctAnswer: false),
-        QuizQuestion(
+        .init(
             image: "The Ice Age Adventures of Buck Wild",
             text: "Рейтинг этого фильма больше чем 6?",
             correctAnswer: false),
-        QuizQuestion(
+        .init(
             image: "Tesla",
             text: "Рейтинг этого фильма больше чем 6?",
             correctAnswer: false),
-        QuizQuestion(
+        .init(
             image: "Vivarium",
             text: "Рейтинг этого фильма больше чем 6?",
             correctAnswer: false)
@@ -76,6 +76,7 @@ final class MovieQuizViewController: UIViewController {
         let currentQuestion = questions[currentQuestionIndex]
         let viewModel = convert(model: currentQuestion)
         show(quiz: viewModel)
+        imageView.layer.cornerRadius = 20
     }
     
     private func convert(model: QuizQuestion) -> QuizStepViewModel {
@@ -120,7 +121,6 @@ final class MovieQuizViewController: UIViewController {
         imageView.layer.masksToBounds = true
         imageView.layer.borderWidth = 8
         imageView.layer.borderColor = isCorrect ? UIColor.ypGreen.cgColor : UIColor.ypRed.cgColor
-        imageView.layer.cornerRadius = 20
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             self.showNextQuestionOrResults()
