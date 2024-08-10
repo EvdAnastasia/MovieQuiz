@@ -10,18 +10,6 @@ final class StatisticService {
     }
     
     private let storage: UserDefaults = .standard
-    private let decoder: JSONDecoder
-    private let encoder: JSONEncoder
-    private let dateProvider: () -> Date
-    
-    init(decoder: JSONDecoder = JSONDecoder(),
-         encoder: JSONEncoder = JSONEncoder(),
-         dateProvider: @escaping () -> Date = { Date() }
-    ) {
-        self.decoder = decoder
-        self.encoder = encoder
-        self.dateProvider = dateProvider
-    }
 }
 
 extension StatisticService: StatisticServiceProtocol {
@@ -66,17 +54,16 @@ extension StatisticService: StatisticServiceProtocol {
     
     var bestGame: GameResult? {
         get {
-            guard let data = storage.data(forKey: Keys.bestGame.rawValue),
-                  let bestGame = try? decoder.decode(GameResult.self, from: data) else {
-                return nil
-            }
-            
-            return bestGame
+            let correct = storage.integer(forKey: "bestGame.correct")
+            let total = storage.integer(forKey: "bestGame.total")
+            let date = UserDefaults.standard.object(forKey: "bestGame.date") as? Date ?? Date()
+            return GameResult(correct: correct, total: total, date: date)
         }
         
         set {
-            let data = try? encoder.encode(newValue)
-            storage.set(data, forKey: Keys.bestGame.rawValue)
+            storage.set(newValue?.correct, forKey: "bestGame.correct")
+            storage.set(newValue?.total, forKey: "bestGame.total")
+            storage.set(newValue?.date, forKey: "bestGame.date")
         }
     }
     
@@ -86,8 +73,7 @@ extension StatisticService: StatisticServiceProtocol {
         self.total += amount
         self.gamesCount += 1
         
-        let date = dateProvider()
-        let currentBestGame = GameResult(correct: count, total: amount, date: date)
+        let currentBestGame = GameResult(correct: count, total: amount, date: Date())
         
         if let previousBestGame = bestGame {
             if currentBestGame.isBetterThan(previousBestGame) {
@@ -98,3 +84,4 @@ extension StatisticService: StatisticServiceProtocol {
         }
     }
 }
+

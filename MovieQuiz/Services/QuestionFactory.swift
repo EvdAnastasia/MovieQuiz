@@ -1,6 +1,7 @@
 import Foundation
 
 final class QuestionFactory {
+    
     private weak var delegate: QuestionFactoryDelegate?
     
     init(delegate: QuestionFactoryDelegate? = nil) {
