@@ -41,6 +41,7 @@ final class MovieQuizViewController: UIViewController {
         hideLoadingIndicator()
         
         let alertModel = AlertModel(
+            identifier: "Network error",
             title: "Ошибка",
             message: message,
             buttonText: "Попробовать ещё раз",
@@ -108,6 +109,7 @@ final class MovieQuizViewController: UIViewController {
         statisticService?.store(correct: correctAnswers, total: questionsAmount)
         
         let alertModel = AlertModel(
+            identifier: "Game results",
             title: "Этот раунд окончен!",
             message: makeResultMessage(),
             buttonText: "Сыграть еще раз",
