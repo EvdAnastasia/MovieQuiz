@@ -33,7 +33,9 @@ final class MovieQuizViewController: UIViewController {
         changeStateButtons(isEnabled: false)
         presenter.noButtonClicked()
     }
-    
+}
+
+extension MovieQuizViewController: MovieQuizViewControllerProtocol {
     func show(quiz step: QuizStepViewModel) {
         changeStateButtons(isEnabled: true)
         imageView.layer.borderColor = UIColor.clear.cgColor
