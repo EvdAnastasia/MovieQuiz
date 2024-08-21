@@ -16,9 +16,12 @@ final class MovieQuizViewController: UIViewController {
     private var questionFactory: QuestionFactoryProtocol?
     private var alertPresenter: AlertPresenterProtocol?
     private var statisticService: StatisticServiceProtocol?
+    private var presenter: MovieQuizPresenter!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        presenter = MovieQuizPresenter(viewController: self)
+        
         questionFactory = QuestionFactory(moviesLoader: MoviesLoader(), delegate: self)
         alertPresenter = AlertPresenter(delegate: self)
         statisticService = StatisticService()
@@ -57,7 +60,7 @@ final class MovieQuizViewController: UIViewController {
     }
     
     func didLoadDataFromServer() {
-        activityIndicator.isHidden = true 
+        activityIndicator.isHidden = true
         questionFactory?.requestNextQuestion()
     }
     
@@ -79,7 +82,7 @@ final class MovieQuizViewController: UIViewController {
         counterLabel.text = step.questionNumber
     }
     
-    private func showAnswerResult(isCorrect: Bool) {
+    func showAnswerResult(isCorrect: Bool) {
         if isCorrect {
             correctAnswers += 1
         }
@@ -147,22 +150,16 @@ final class MovieQuizViewController: UIViewController {
         yesButton.isEnabled = isEnabled
     }
     
-    @IBAction private func noButtonClicked(_ sender: Any) {
+    @IBAction private func noButtonClicked(_ sender: UIButton) {
         changeStateButtons(isEnabled: false)
-        guard let currentQuestion = currentQuestion else {
-            return
-        }
-        let givenAnswer = false
-        showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
+        presenter.currentQuestion = currentQuestion
+        presenter.noButtonClicked()
     }
     
-    @IBAction private func yesButtonClicked(_ sender: Any) {
+    @IBAction private func yesButtonClicked(_ sender: UIButton) {
         changeStateButtons(isEnabled: false)
-        guard let currentQuestion = currentQuestion else {
-            return
-        }
-        let givenAnswer = true
-        showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
+        presenter.currentQuestion = currentQuestion
+        presenter.yesButtonClicked()
     }
 }
 
