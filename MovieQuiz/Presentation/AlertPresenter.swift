@@ -18,6 +18,7 @@ extension AlertPresenter: AlertPresenterProtocol {
             preferredStyle: .alert)
         
         let action = UIAlertAction(title: result.buttonText, style: .default) { _ in result.completion() }
+        alert.view.accessibilityIdentifier = result.identifier
         
         alert.addAction(action)
         delegate?.present(alert, animated: true, completion: nil)
